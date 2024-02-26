@@ -60,7 +60,9 @@ class CountryController extends Controller
      */
     public function edit(Country $country)
     {
-        //
+        return view('country.edit', [
+            'country' => $country
+        ]);
     }
 
     /**
@@ -68,7 +70,21 @@ class CountryController extends Controller
      */
     public function update(Request $request, Country $country)
     {
-        //
+        $request->validate([
+            'name' => ['required'],
+            'capital' => ['required'],
+        ]);
+
+        $data = [
+            'name' => $request->name,
+            'capital' => $request->capital,
+        ];
+
+        if ($country->update($data)) {
+            return back()->with(['success' => 'Magic has been spelled!']);
+        } else {
+            return back()->with(['failure' => 'Magic has become shopper!']);
+        }
     }
 
     /**
@@ -76,6 +92,10 @@ class CountryController extends Controller
      */
     public function destroy(Country $country)
     {
-        //
+        if ($country->delete()) {
+            return back()->with(['success' => 'Magic has been spelled!']);
+        } else {
+            return back()->with(['failure' => 'Magic has become shopper!']);
+        }
     }
 }
